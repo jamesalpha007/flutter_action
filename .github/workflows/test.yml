@@ -35,20 +35,23 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}  
-      - name: Install toolchain
-        uses: actions-rs/toolchain@v1
+      - name: Setup | Rust 
+        uses: ATiltedTree/setup-rust@v1
         with:
-          toolchain: stable
-          target: aarch64-apple-ios
-          override: true 
-      - name: extra target
-        run: rustup target add x86_64-apple-ios    
+          rust-version: stable
+          components: clippy   
+      - name: Checkout rust version
+        run: rustc --version   
       - name: install frb codegen
         run: cargo install flutter_rust_bridge_codegen@1.56.0
       - name: install cargo lipo
         run: cargo install cargo-lipo
       - name: install llvm
         run: brew install llvm    
+      - name: rustup target
+        run: |
+          rustup target add aarch64-apple-ios
+          rustup target add x86_64-apple-ios  
       - name: running codegen
         run: |
           make ios
