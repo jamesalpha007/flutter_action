@@ -39,6 +39,10 @@ jobs:
         run: cargo install cargo-lipo
       - name: install llvm
         run: brew install llvm    
+      - name: rustup target
+        run: |
+          rustup target add aarch64-apple-ios
+          rustup target add x86_64-apple-ios  
       - name: running codegen
         run: |
           make ios
