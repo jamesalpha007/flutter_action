@@ -39,8 +39,10 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: aarch64-apple-ios x86_64-apple-ios
+          target: aarch64-apple-ios
           override: true 
+      - name: extra target
+        run: rustup target add x86_64-apple-ios    
       - name: install frb codegen
         run: cargo install flutter_rust_bridge_codegen@1.56.0
       - name: install cargo lipo
