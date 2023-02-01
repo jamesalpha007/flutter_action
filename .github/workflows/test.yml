@@ -33,8 +33,9 @@ jobs:
           components: clippy   
       - name: Checkout rust version
         run: rustc --version    
-      # - name: generate .a file
-      #   run: |
-      #     make ios
-      #     flutter build ios --no-codesign
-      #     ls -a    
+      - name: generate .a file
+        run: |
+          make ios
+          flutter build ios --no-codesign
+          cd ios/Runner
+          ls -a
