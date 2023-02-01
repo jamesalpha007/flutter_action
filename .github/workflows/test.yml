@@ -2,7 +2,6 @@ name: Flutter Build
 on:
   push:
     branches: ['main']
-  workflow_dispatch:
 
 jobs:
   build:
@@ -24,7 +23,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            target/
+            ./src_rust/target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}            
       - uses: subosito/flutter-action@v2
         with:
