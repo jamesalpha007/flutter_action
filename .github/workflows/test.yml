@@ -26,8 +26,15 @@ jobs:
         run: |
           flutter clean
           flutter pub get
-      - name: generate .a file
-        run: |
-          make ios
-          flutter build ios --no-codesign
-          ls -a    
+      - name: Setup | Rust 
+        uses: ATiltedTree/setup-rust@v1
+        with:
+          rust-version: stable
+          components: clippy   
+      - name: Checkout rust version
+        run: rustc --version    
+      # - name: generate .a file
+      #   run: |
+      #     make ios
+      #     flutter build ios --no-codesign
+      #     ls -a    
