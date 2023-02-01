@@ -32,7 +32,11 @@ jobs:
           rust-version: stable
           components: clippy   
       - name: Checkout rust version
-        run: rustc --version    
+        run: rustc --version   
+      - name: install rust dependencies
+        run: |
+          cargo install flutter_rust_bridge_codegen@1.56.0
+          cargo install cargo-lipo
       - name: generate .a file
         run: |
           make ios
