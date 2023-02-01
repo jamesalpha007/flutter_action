@@ -1,7 +1,7 @@
 name: Flutter Build
 on:
   push:
-    branches: ['dev']
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -26,23 +26,27 @@ jobs:
         run: |
           flutter clean
           flutter pub get
-      - name: Setup | Rust 
-        uses: ATiltedTree/setup-rust@v1
+      - uses: actions/cache@v3
         with:
-          rust-version: stable
-          components: clippy   
-      - name: Checkout rust version
-        run: rustc --version   
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}  
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: aarch64-apple-ios x86_64-apple-ios
+          override: true 
       - name: install frb codegen
         run: cargo install flutter_rust_bridge_codegen@1.56.0
       - name: install cargo lipo
         run: cargo install cargo-lipo
       - name: install llvm
         run: brew install llvm    
-      - name: rustup target
-        run: |
-          rustup target add aarch64-apple-ios
-          rustup target add x86_64-apple-ios  
       - name: running codegen
         run: |
           make ios
