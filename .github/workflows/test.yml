@@ -33,13 +33,16 @@ jobs:
           components: clippy   
       - name: Checkout rust version
         run: rustc --version   
-      - name: install rust dependencies
-        run: |
-          cargo install flutter_rust_bridge_codegen@1.56.0
-          cargo install cargo-lipo
-      - name: generate .a file
+      - name: install frb codegen
+        run: cargo install flutter_rust_bridge_codegen@1.56.0
+      - name: install cargo lipo
+        run: cargo install cargo-lipo
+      - name: install llvm
+        run: brew install llvm    
+      - name: running codegen
         run: |
           make ios
-          flutter build ios --no-codesign
           cd ios/Runner
           ls -a
+      - name: build ios
+        run: flutter build ios --no-codesign    
