@@ -4,6 +4,7 @@ on:
     branches: ["main"]
 env:
   flutter_version: "3.3.10"
+  cargo_lipo: "cargo_lipo_one"
 
 jobs:
   build:
@@ -24,7 +25,7 @@ jobs:
         with:
           path: |
             ~/.cargo/bin/cargo-lipo
-          key: ${{ runner.OS }}-cargo-lipo-cache}}          
+          key: ${{ runner.OS }}-cargo-lipo-cache-${{env.cargo_lipo}}          
       - name: Setup | Rust
         uses: ATiltedTree/setup-rust@v1
         with:
@@ -32,6 +33,7 @@ jobs:
           components: clippy
       - name: rustup target
         run: |
+          rustup show
           rustup target add aarch64-apple-ios
           rustup target add x86_64-apple-ios
       - name: install cargo lipo
