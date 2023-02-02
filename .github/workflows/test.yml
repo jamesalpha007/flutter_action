@@ -10,6 +10,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/cache@v3
+        id: cache-deps
         with:
           path: |
             ~/.cargo/bin/
