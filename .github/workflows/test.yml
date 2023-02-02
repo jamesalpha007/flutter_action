@@ -38,7 +38,6 @@ jobs:
           rustup target add x86_64-apple-ios
       - name: check target path
         run: |
-          cd ./src_rust/target
           ls -a
       - name: install cargo lipo
         if: steps.cache-lipo.outputs.cache-hit != 'true'
