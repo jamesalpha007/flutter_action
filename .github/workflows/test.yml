@@ -19,23 +19,24 @@ jobs:
             ~/.cargo/git/db/
             ./src_rust/target/
           key: ${{ runner.OS }}-cargo-install-cache}}
+      - uses: actions/cache@v3
+        id: cache-lipo
+        with:
+          path: |
+            ~/.cargo/bin/cargo-lipo
+          key: ${{ runner.OS }}-cargo-lipo-cache}}          
       - name: Setup | Rust
         uses: ATiltedTree/setup-rust@v1
         with:
           rust-version: stable
           components: clippy
       - name: rustup target
-        if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |
-          echo ${{steps.cache-deps.outputs.cache-hit}}
           rustup target add aarch64-apple-ios
           rustup target add x86_64-apple-ios
       - name: install cargo lipo
-        if: steps.cache-deps.outputs.cache-hit != 'true'
+        if: steps.cache-lipo.outputs.cache-hit != 'true'
         run: cargo install cargo-lipo
-      - name: install rust bridge codegen
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: cargo install flutter_rust_bridge_codegen@1.56.0
         
 
 # jobs: 
