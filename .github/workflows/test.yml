@@ -24,14 +24,16 @@ jobs:
           rust-version: stable
           components: clippy
       - name: rustup target
+        if: steps.cache-deps.outputs.cache-hit != 'true'
         run: |
+          echo ${{steps.cache-deps.outputs.cache-hit}}
           rustup target add aarch64-apple-ios
           rustup target add x86_64-apple-ios
       - name: install cargo lipo
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: cargo install cargo-lipo
         
-        
+
 # jobs: 
 #   build:
 #     runs-on: macos-latest
