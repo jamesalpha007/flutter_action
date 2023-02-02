@@ -33,6 +33,9 @@ jobs:
       - name: install cargo lipo
         if: steps.cache-deps.outputs.cache-hit != 'true'
         run: cargo install cargo-lipo
+      - name: install rust bridge codegen
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: cargo install flutter_rust_bridge_codegen@1.56.0
         
 
 # jobs: 
