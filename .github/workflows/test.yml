@@ -4,7 +4,8 @@ on:
     branches: ["main"]
 env:
   flutter_version: "3.3.10"
-  cargo_lipo: "cargo_lipo_one"
+  cargo_lipo: "cargo_lipo_v1"
+  frb_gen: "frb_gen_v1"
 
 jobs:
   build:
@@ -14,18 +15,33 @@ jobs:
         id: cache-deps
         with:
           path: |
+            /Users/runner/hostedtoolcache/flutter
             ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             ./src_rust/target/
-          key: ${{ runner.OS }}-cargo-install-cache}}
+          key: ${{ runner.OS }}-cargo-install-cache-v1}}
       - uses: actions/cache@v3
         id: cache-lipo
         with:
           path: |
             ~/.cargo/bin/cargo-lipo
-          key: ${{ runner.OS }}-cargo-lipo-cache-${{env.cargo_lipo}}          
+          key: ${{ runner.OS }}-cargo-lipo-cache-${{env.cargo_lipo}}
+      - uses: actions/cache@v3
+        id: frb-gen
+        with:
+          path: |
+            ~/.cargo/bin/flutter_rust_bridge_codegen
+          key: ${{ runner.OS }}-frb-gen-cache-${{env.frb_gen}}
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.3.10"
+          channel: "stable"
+      - name: Clean & Get Flutter dependencies
+        run: |
+          flutter clean
+          flutter pub get
       - name: Setup | Rust
         uses: ATiltedTree/setup-rust@v1
         with:
@@ -36,15 +52,15 @@ jobs:
           rustup show
           rustup target add aarch64-apple-ios
           rustup target add x86_64-apple-ios
-      - name: check target path
-        run: |
-          pwd
       - name: install cargo lipo
         if: steps.cache-lipo.outputs.cache-hit != 'true'
         run: cargo install cargo-lipo
-        
-
-# jobs: 
+      - name: install frb codegen
+        if: steps.frb-gen.outputs.cache-hit != 'true'
+        run: cargo install flutter_rust_bridge_codegen@1.56.0
+      - name: check file path
+        run: ls -a  
+# jobs:
 #   build:
 #     runs-on: macos-latest
 #     steps:
@@ -57,7 +73,7 @@ jobs:
 #         with:
 #           flutter-version: ${{ env.flutter_version }}
 #           channel: "stable"
-          
+
 # jobs:
 #   build:
 #     runs-on: macos-latest
