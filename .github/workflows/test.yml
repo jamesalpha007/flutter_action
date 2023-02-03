@@ -67,8 +67,6 @@ jobs:
       - name: install frb codegen
         if: steps.frb-gen.outputs.cache-hit != 'true'
         run: cargo install flutter_rust_bridge_codegen@1.56.0
-      - name: install llvm
-        run: brew install llvm  
       - name: running codegen
         run: make ios    
       - name: build ios
